@@ -1,8 +1,6 @@
-from django.urls import path,include
-from department.api.views import department_list, create_department
-urlpatterns = [
-    
-    path('',department_list, name="department"),
-    path('create',create_department, name="department")
+from django.urls import path
+from department.api.views import  DepartmentAPIView
 
+urlpatterns = [    
+    path('',DepartmentAPIView.as_view(),name="department-view")
 ]

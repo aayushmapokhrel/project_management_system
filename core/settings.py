@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'department',
     'employee',
     'client',
+    'user',
 
     # 3rd party app
     'rest_framework'
@@ -75,6 +76,12 @@ TEMPLATES = [
         },
     },
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
