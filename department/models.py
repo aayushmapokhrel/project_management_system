@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 
 class Department(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT,related_name='department_created_at')
-    modified_by = models.ForeignKey(User, on_delete=models.RESTRICT,related_name='department_modified_at')
+    created_by = models.ForeignKey(User, null=True ,on_delete=models.RESTRICT,related_name='department_created_at')
+    modified_by = models.ForeignKey(User,null=True, on_delete=models.RESTRICT,related_name='department_modified_at')
     is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True,)
     modified_at = models.DateTimeField(auto_now=True)

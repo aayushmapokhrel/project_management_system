@@ -5,7 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework import status
-
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 
 class DepartmentAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -15,17 +16,48 @@ class DepartmentAPIView(APIView):
         serializer = DepartMentSerializer(data, many=True) 
         return Response(serializer.data)
     
-    
+    @extend_schema(
+        request=DepartMentSerializer,
+        responses={200: DepartMentSerializer},
+    )
     def post(self,request):
         data = request.data
-        data['created_by']=request.user.id
-        data['modified_by']=request.user.id
         serialzier = DepartMentSerializer(data=data)
         if serialzier.is_valid():
-            serialzier.save()
+            department = serialzier.save()
+            department.created_by = request.user
+            department.save()
             return Response({
                 "message":"Data successfully added",
                 "data":serialzier.data
             },status=status.HTTP_200_OK)
         return Response(serialzier.errors,status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     
+
+class DepartMentUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self,request,pk):
+        qs = Department.objects.get(id=pk)
+        serializer = DepartMentSerializer(data=request.data, instance=qs)
+        if serializer.is_valid():
+            department = serializer.save()
+            department.modified_by = request.user
+            department.save()
+            return Response({
+                "message":"Data successfully updated",
+                "data":serializer.data
+            },status=status.HTTP_200_OK)
+        return Response(serializer.errors,status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+    def delete(self,request,pk):
+        qs = Department.objects.get(id=pk)
+        if qs.created_by.id != request.user.id:
+            return Response({
+                "error":f'Only created user can delete {qs.name} department'
+            },status=status.HTTP_401_UNAUTHORIZED)
+        qs.delete()
+        return Response({
+                "message":"Data successfully deleted",
+            },status=status.HTTP_200_OK)
