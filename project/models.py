@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from employee.models import Employee
 from client.models import Client
 
+
 # Create your models here.
 class Project(models.Model):
     class Prioritystatus(models.IntegerChoices):
@@ -17,7 +18,7 @@ class Project(models.Model):
         ONHOLD = 3, "ONHOLD"
         ABORT = 4, "ABORT"
 
-    client = models.ForeignKey(Client, on_delete=models.SET_NULL,null=True,blank=True)
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     price = models.DecimalField(max_digits=9, decimal_places=2)
     image = models.ImageField(upload_to="project/images", null=True, blank=True)
@@ -32,10 +33,18 @@ class Project(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     deadline = models.DateTimeField()
     modified_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True, related_name="project_modified_field"
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="project_modified_field",
     )
     created_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True, related_name="project_created_field"
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="project_created_field",
     )
 
     def _str_(self):

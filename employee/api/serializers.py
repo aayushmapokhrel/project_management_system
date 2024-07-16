@@ -7,6 +7,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
     designation = serializers.PrimaryKeyRelatedField(
         queryset=Designation.objects.all()
         )
+    name = serializers.CharField(required=True)
+    address = serializers.CharField(required=True)
 
     class Meta:
         model = Employee
