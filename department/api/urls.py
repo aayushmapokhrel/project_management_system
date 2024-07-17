@@ -9,9 +9,9 @@ from department.api.views import (
 urlpatterns = [
     path("", DepartmentAPIView.as_view(), name="department-view"),
     path("<int:pk>", DepartMentUpdateView.as_view(), name="department-update"),
-    path("/designation", DesignationAPIVIEW.as_view(), name="designation-view"),
+    path("designation", DesignationAPIVIEW.as_view(), name="designation-view"),
     path(
-        "/designation/<int:id>",
+        "designation/<int:id>",
         DesignationUpdateView.as_view(),
         name="designation-update",
     ),

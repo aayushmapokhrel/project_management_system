@@ -45,7 +45,7 @@ class Task(models.Model):
     status = models.IntegerField(choices=Taskstatus.choices, default=Taskstatus.TODO)
     type = models.IntegerField(choices=Tasktype.choices, default=Tasktype.FEATURES)
     points = models.IntegerField(default=0)
-    created_by = models.ForeignKey(Employee, on_delete=models.RESTRICT, related_name="task_created_by")
+    created_by = models.ForeignKey(Employee, on_delete=models.RESTRICT,null=True, related_name="task_created_by")
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     modified_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, related_name="task_modified_by")

@@ -12,7 +12,7 @@ class DepartMentSerializer(serializers.ModelSerializer):
 
 class DesignationSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
-    department = serializers.PrimaryKeyRelatedField(queryset=Department.objects.all())
+    department = DepartMentSerializer()
 
     class Meta:
         model = Designation

@@ -1,3 +1,4 @@
+from typing import Iterable
 from django.db import models
 from department.models import Designation
 from django.contrib.auth.models import User
@@ -39,5 +40,11 @@ class Employee(models.Model):
         related_name="project_modified_by",
     )
 
-    def _str_(self):
+    def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        self.employee_id = f'E-00{self.id}'
+        super(Employee, self).save(*args, **kwargs)
+
+
