@@ -11,6 +11,10 @@ from drf_spectacular.utils import extend_schema
 class EmployeeAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=EmployeeSerializer,
+        responses={200: EmployeeSerializer},
+    )
     def get(self, request):
         data = Employee.objects.filter(is_active=True)
         serializer = EmployeeSerializer(data, many=True)
@@ -43,6 +47,10 @@ class EmployeeAPIView(APIView):
 class EmployeeUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=EmployeeSerializer,
+        responses={200: EmployeeSerializer},
+    )
     def put(self, request, pk):
         qs = Employee.objects.get(id=pk)
         serializer = EmployeeSerializer(data=request.data, instance=qs)
@@ -66,7 +74,9 @@ class EmployeeUpdateView(APIView):
         qs = Employee.objects.get(id=pk)
         if qs.created_by.id != request.user.id:
             return Response(
-                {"error": f"Only created user can delete {qs.name} employee"},
+                {
+                    "error": f"Only created user can delete {qs.name} employee"
+                    },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         qs.delete()
