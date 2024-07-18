@@ -11,7 +11,7 @@ class Department(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,)
     modified_at = models.DateTimeField(auto_now=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
     
 
@@ -24,5 +24,5 @@ class Designation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     
-    def str(self) -> str:
+    def __str__(self) -> str:
         return self.name

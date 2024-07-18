@@ -43,7 +43,7 @@ class Task(models.Model):
     assigned_to = models.ManyToManyField(Employee)
     description = models.TextField(null=True)
     status = models.IntegerField(choices=Taskstatus.choices, default=Taskstatus.TODO)
-    type = models.IntegerField(choices=Tasktype.choices, default=Tasktype.FEATURES)
+    type = models.IntegerField(choices=Tasktype.choices)
     points = models.IntegerField(default=0)
     created_by = models.ForeignKey(Employee, on_delete=models.RESTRICT,null=True, related_name="task_created_by")
     created_at = models.DateTimeField(auto_now_add=True)
