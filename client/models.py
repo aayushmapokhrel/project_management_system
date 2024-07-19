@@ -8,7 +8,7 @@ class Client(models.Model):
     client_id = models.CharField(max_length=10, null=True, blank=True)
     phone = models.PositiveBigIntegerField()
     email = models.EmailField()
-    website = models.URLField()
+    website = models.URLField(blank=True)
     address = models.CharField(max_length=50)
     is_active = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,3 +18,8 @@ class Client(models.Model):
 
     def _str_(self) -> str:
         return self.name
+    
+    def save(self, *args, **kwargs):
+        
+        self.client_id = f'Cid-{self.id}'
+        super().save(*args, **kwargs)
