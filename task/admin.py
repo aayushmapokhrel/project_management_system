@@ -4,7 +4,7 @@ from task.models import Task, TaskComment, Sprint
 # Register your models here.
 @admin.register(Task)
 class Taskadmin(admin.ModelAdmin):
-    list_display= ['project', 'name', 'due_date']
+    list_display= ['project', 'name', 'due_date','points']
     search_fields = ['project', 'name']
 
 @admin.register(TaskComment)

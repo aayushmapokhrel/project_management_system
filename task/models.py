@@ -44,13 +44,13 @@ class Task(models.Model):
     description = models.TextField(null=True)
     status = models.IntegerField(choices=Taskstatus.choices, default=Taskstatus.TODO)
     type = models.IntegerField(choices=Tasktype.choices)
-    points = models.IntegerField(default=0)
+    points = models.PositiveIntegerField(default=0)
     created_by = models.ForeignKey(Employee, on_delete=models.RESTRICT,null=True, related_name="task_created_by")
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     modified_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, related_name="task_modified_by")
     
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 

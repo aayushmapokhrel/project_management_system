@@ -5,6 +5,7 @@ from task.models import Sprint
 from employee.models import Employee
 from rest_framework.validators import ValidationError
 from datetime import datetime
+from django.db.models import Sum
 
 
 class TaskSerializers(serializers.ModelSerializer):
@@ -19,13 +20,25 @@ class TaskSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        exclude = ["created_by", "modified_by"]
-        
+        fields = '__all__'
+        # exclude = ["created_by", "modified_by"]
+    
+    def validate(self, data):
+        task_points = Task.objects.filter(sprint=data['sprint'][0].id).aggregate(count = Sum('points'))
+        if task_points['count'] is None:
+            total_task_point = 0
+        else:
+            total_task_point = data.get('points')+task_points["count"]
+        if data['sprint'][0].point < total_task_point:
+            raise ValidationError("Overall task point is greater than sprint  point")
+        return data
+    
     def validate_type(self, type):
         task_type = set((i.value) for i in Task.Tasktype)
         if type not in task_type:
             raise ValidationError("Invalid Type")
         return type
+
     def validate_due_date(self, due_date):
         print(due_date, datetime.now().date())
         if due_date<datetime.now().date():
