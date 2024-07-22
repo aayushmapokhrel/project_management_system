@@ -1,10 +1,10 @@
 from rest_framework.response import Response
-from task.models import Task, Sprint
-from task.api.serializers import TaskSerializers, SprintSerializers, ReadSprintSerializers
+from task.models import Task, Sprint, TaskComment
+from task.api.serializers import TaskSerializers, SprintSerializers, ReadSprintSerializers, TaskCommentSerializers
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
-from rest_framework import status
+from rest_framework import status, generics
 
 
 class TaskAPIView(APIView):
@@ -151,3 +151,13 @@ class SprintUpdateView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+        
+class TaskCommentCreateAPIView(generics.ListCreateAPIView):
+    queryset = TaskComment.objects.all()
+    serializer_class = TaskCommentSerializers
+  
+
+class TaskCommentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TaskComment.objects.all()
+    serializer_class = TaskCommentSerializers
+    

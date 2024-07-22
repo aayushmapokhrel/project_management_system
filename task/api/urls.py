@@ -3,7 +3,9 @@ from task.api.views import(
             TaskAPIView,
             TaskUpdateView,
             SprintAPIView,
-            SprintUpdateView
+            SprintUpdateView,
+            TaskCommentCreateAPIView,
+            TaskCommentRetrieveUpdateDestroyAPIView
 )
 
 urlpatterns = [
@@ -11,6 +13,8 @@ urlpatterns = [
     path('<int:pk>', TaskUpdateView.as_view(), name='task_update'),
     path('sprint/', SprintAPIView.as_view(), name='sprint_view'),
     path('sprint/<int:pk>', SprintUpdateView.as_view(), name='task_update'),
+    path('comment/', TaskCommentCreateAPIView.as_view(), name='comment_create_list'),
+    path('comment_rud/<int:pk>/', TaskCommentRetrieveUpdateDestroyAPIView.as_view(), name='comment_create_list'),
 
 
 ]
