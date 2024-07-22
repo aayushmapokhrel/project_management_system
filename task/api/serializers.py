@@ -2,6 +2,7 @@ from rest_framework import serializers
 from task.models import Task
 from project.models import Project
 from task.models import Sprint
+from task.models import TaskComment
 from employee.models import Employee
 from rest_framework.validators import ValidationError
 from datetime import datetime
@@ -59,3 +60,28 @@ class ReadSprintSerializers(serializers.ModelSerializer):
     class Meta:
         model = Sprint
         fields = ["name", "point", "created_by"]
+
+class TaskCommentSerializers(serializers.ModelSerializer):
+    task = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all(),required=True)
+    created_by = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(),required=True)
+    employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(),required=True)
+    comment = serializers.CharField(max_length=1000,required=True)
+    class Meta:
+        model = TaskComment  
+        fields='__all__'
+        read_only_fields = ["modified_by", "file","modified_at", "created_at", "employee"]
+        
+    def validate_task(self, value):
+        if not Task.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Task does not exist.")
+        return value
+
+    def validate_created_by(self, value):
+        if not Employee.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Employee does not exist.")
+        return value
+
+    def validate_comment(self, value):
+        if not isinstance(value, str):
+            raise serializers.ValidationError("Comment must be a valid string.")
+ 
