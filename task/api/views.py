@@ -4,7 +4,14 @@ from task.api.serializers import TaskSerializers, SprintSerializers, ReadSprintS
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
+<<<<<<< HEAD
 from rest_framework import status, generics
+=======
+from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from project.models import Project
+from django.db.models import Count
+>>>>>>> b041b8d (Perform statistics on task)
 
 
 class TaskAPIView(APIView):
@@ -161,3 +168,24 @@ class TaskCommentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIV
     queryset = TaskComment.objects.all()
     serializer_class = TaskCommentSerializers
     
+
+# for taskstats
+
+class TaskStats(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        total_tasks = Task.objects.filter(project_id=id).count()
+        task_counts = Task.objects.filter(project_id=id).values('status').annotate(count=Count('status')).order_by('status')
+        status_dict = dict(Task.Taskstatus.choices)  # Convert choices to a dict
+        status_counts = {
+            status_dict.get(data['status']):data['count'] 
+            for data in task_counts
+            }
+        
+        result = {
+            'Totaltasks': total_tasks,
+            'Status_count': status_counts
+        }
+
+        return Response(result, status=status.HTTP_200_OK)
