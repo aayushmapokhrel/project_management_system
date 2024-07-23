@@ -55,7 +55,7 @@ class Task(models.Model):
 
 
 class TaskComment(models.Model):
-    task = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True)
+    task = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, related_name="task_comment")
     employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
     comment = models.TextField()
     file = models.FileField(upload_to="file", blank=True, null=True)

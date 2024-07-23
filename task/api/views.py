@@ -1,30 +1,30 @@
 from rest_framework.response import Response
 from task.models import Task, Sprint, TaskComment
-from task.api.serializers import TaskSerializers, SprintSerializers, ReadSprintSerializers, TaskCommentSerializers
+from task.api.serializers import TaskSerializers, SprintSerializers, ReadSprintSerializers, TaskCommentSerializers, TaskGetSerializers
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
-<<<<<<< HEAD
 from rest_framework import status, generics
-=======
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from project.models import Project
 from django.db.models import Count
->>>>>>> b041b8d (Perform statistics on task)
+from project.models import Project
+from rest_framework.generics import GenericAPIView
+from django.db.models import Count
 
 
 class TaskAPIView(APIView):
-  permission_classes = [IsAuthenticated]
+#   permission_classes = [IsAuthenticated]
   
   @extend_schema(
         request=TaskSerializers,
-        responses={200: TaskSerializers},
+        responses={200: TaskGetSerializers},
     )
   
   def get(self, request):
     data = Task.objects.all()
-    serializer = TaskSerializers(data, many=True)
+    serializer = TaskGetSerializers(data, many=True)
     return Response(serializer.data)
   
   @extend_schema(

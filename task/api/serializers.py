@@ -65,23 +65,24 @@ class TaskCommentSerializers(serializers.ModelSerializer):
     task = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all(),required=True)
     created_by = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(),required=True)
     employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(),required=True)
-    comment = serializers.CharField(max_length=1000,required=True)
+    comment = serializers.CharField(required=True)
     class Meta:
         model = TaskComment  
         fields='__all__'
         read_only_fields = ["modified_by", "file","modified_at", "created_at", "employee"]
-        
-    def validate_task(self, value):
-        if not Task.objects.filter(id=value).exists():
-            raise serializers.ValidationError("Task does not exist.")
-        return value
+    
 
-    def validate_created_by(self, value):
-        if not Employee.objects.filter(id=value).exists():
-            raise serializers.ValidationError("Employee does not exist.")
-        return value
+class TaskGetSerializers(serializers.ModelSerializer):
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
+    sprint = serializers.PrimaryKeyRelatedField(
+        queryset=Sprint.objects.all(), many=True
+    )
+    assigned_to = serializers.PrimaryKeyRelatedField(
+        queryset=Employee.objects.all(), many=True
+    )
+    type = serializers.IntegerField(required=True)
+    task_comment = TaskCommentSerializers(many=True)
 
-    def validate_comment(self, value):
-        if not isinstance(value, str):
-            raise serializers.ValidationError("Comment must be a valid string.")
- 
+    class Meta:
+        model = Task
+        fields = '__all__'    
