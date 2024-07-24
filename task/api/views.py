@@ -172,7 +172,7 @@ class TaskCommentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIV
 # for taskstats
 
 class TaskStats(GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request, id):
         total_tasks = Task.objects.filter(project_id=id).count()
