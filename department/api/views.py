@@ -30,7 +30,7 @@ class DepartmentAPIView(APIView):
             department.save()
             return Response(
                 {"message": "Data successfully added", "data": serialzier.data},
-                status=status.HTTP_200_OK,
+                status=status.HTTP_201_CREATED,
             )
         return Response(serialzier.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
