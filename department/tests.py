@@ -25,7 +25,7 @@ class TestDepartmentAPIView(APITestCase):
     
     def setUp(self):
         self.user = User.objects.create(username='testuser', password='password')
-        self.client.force_authenticate(user=self.user)
+     
         self.dep= Department.objects.create(
             name = "IT",
             created_by=self.user,
@@ -34,6 +34,7 @@ class TestDepartmentAPIView(APITestCase):
 
     def test_department_list(self):
         url = reverse('department-view')
+        self.client.force_authenticate(user=self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -42,11 +43,27 @@ class TestDepartmentAPIView(APITestCase):
             name = "IT",
             created_by=self.user,
         )
+        self.client.force_authenticate(user=self.user)
         url = reverse('department-view')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()),1)
         self.assertEqual(Department.objects.count(),2)
-
+   
+    def test_post_api_department(self):
+        url = reverse('department-view')
+        self.client.force_authenticate(user=self.user)
+        data  = {
+            'name':'HR'
+        }
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        data = {}
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
+        self.assertEqual(response.json()['name'][0],'This field is required.')
+        
+        
 
         
