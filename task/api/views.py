@@ -12,6 +12,7 @@ from django.db.models import Count
 from project.models import Project
 from rest_framework.generics import GenericAPIView
 from django.db.models import Count
+from rest_framework.decorators import api_view
 
 
 class TaskAPIView(APIView):
@@ -182,10 +183,20 @@ class TaskStats(GenericAPIView):
             status_dict.get(data['status']):data['count'] 
             for data in task_counts
             }
+        employee_counts_by_status = Task.objects.filter(project_id=id).values('name').annotate(employee_count=Count('assigned_to')).order_by('name')
         
         result = {
             'Totaltasks': total_tasks,
-            'Status_count': status_counts
+            'Status_count': status_counts,
+            "task":employee_counts_by_status
         }
 
         return Response(result, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def taskboard(request):
+    task = Task.objects.values('status')
+    print(task)
+    # serialzier = TaskSerializers(task, many=True)
+    # return Response(serialzier.data)
+    return Response(task)

@@ -16,10 +16,11 @@ class Client(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='client_modified_by')
 
-    def _str_(self) -> str:
-        return self.name
     
     def save(self, *args, **kwargs):
-        
-        self.client_id = f'Cid-{self.id}'
-        super().save(*args, **kwargs)
+        client = Client.objects.count()
+        self.client_id = f'Cid-{client}+1'
+        super(Client, self).save(*args, **kwargs)
+    
+    def __str__(self) -> str:
+        return self.name

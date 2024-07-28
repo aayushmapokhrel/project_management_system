@@ -66,4 +66,4 @@ class TaskComment(models.Model):
 
     def str(self) -> str:
         return self.comment
-
+    

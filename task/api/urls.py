@@ -7,6 +7,7 @@ from task.api.views import (
     TaskCommentCreateAPIView,
     TaskCommentRetrieveUpdateDestroyAPIView,
     TaskStats,
+    taskboard
 )
 
 urlpatterns = [
@@ -21,4 +22,5 @@ urlpatterns = [
         name="comment_create_list",
     ),
     path("stats/<int:id>/", TaskStats.as_view(), name="task-stats"),
+    path('board', taskboard,name="task-broard")
 ]

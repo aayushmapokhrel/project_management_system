@@ -5,6 +5,7 @@ from rest_framework.validators import ValidationError
 
 from django.contrib.auth.models import User
 
+
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True, allow_blank=True)
     class Meta:
@@ -39,3 +40,25 @@ class UserInfoSerializer(serializers.ModelSerializer):
         data['access_token']=str(token.access_token)
         data['refresh_token']=str(token)
         return data
+    
+
+class ChangePassword(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    confirm_password = serializers.CharField(required=True)
+
+
+    # def validate(self, validated_data):
+    #     if validated_data['new_password']!=validated_data['confirm_password']:
+    #         raise ValidationError("new password and confirm password mush be same ")
+        
+    #     if old_password == new_password:
+    #         new password should not be same 
+
+    #     check_password(passwrd ) not = old_password 
+
+
+    # user.set_password(data[''])
+
+
+
